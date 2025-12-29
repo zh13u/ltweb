@@ -1,0 +1,72 @@
+/* Toàn trang dùng font Roboto (import ở index.html hoặc App.css) */
+.address-page {
+  max-width: 480px;
+  margin: 70px auto;
+  padding: 28px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  font-family: "Roboto", sans-serif;
+}
+
+.address-page h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 26px;
+  color: #333333;
+}
+
+.address-page .error-message {
+  color: #e74c3c;
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.address-page form {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 20px;
+}
+
+.address-page .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.address-page label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555555;
+}
+
+.address-page input {
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.address-page input:focus {
+  border-color: #f68b1e;
+  box-shadow: 0 0 0 3px rgba(246, 139, 30, 0.2);
+  outline: none;
+}
+
+.address-page button {
+  padding: 14px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #f68b1e 0%, #f9a03f 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.address-page button:hover {
+  background: linear-gradient(135deg, #e57a0b 0%, #d97d1c 100%);
+  transform: translateY(-1px);
+}

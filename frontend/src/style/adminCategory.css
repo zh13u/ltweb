@@ -1,0 +1,120 @@
+/* === Container chính === */
+.ac-container {
+  max-width: 1000px;
+  margin-top: 50px;
+  margin-left: 50px;
+  padding: 40px 20px;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+  background: #f4f7fa;
+  min-height: calc(100vh - 64px);
+}
+
+/* === Header === */
+.ac-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.ac-header h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.ac-btn {
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  border: none;
+}
+
+/* Primary button (Add) */
+.ac-btn-primary {
+  background-color: #f68b1e;
+  color: #fff;
+  margin-right: 600px;
+  margin-top: 7px;
+}
+
+.ac-btn-primary:hover {
+  background-color: #d17a1a;
+  transform: translateY(-2px);
+}
+
+/* Outline button (Edit) */
+.ac-btn-outline {
+  background: #fff;
+  color: #f68b1e;
+  border: 2px solid #f68b1e;
+  margin-right: 10px;
+}
+
+.ac-btn-outline:hover {
+  background: #f68b1e;
+  color: #fff;
+}
+
+/* Danger button (Delete) */
+.ac-btn-danger {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.ac-btn-danger:hover {
+  background: #c0392b;
+}
+
+/* === Grid danh sách === */
+.ac-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* === Card từng category === */
+.ac-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  transition: box-shadow 0.2s;
+}
+
+.ac-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+.ac-card-body {
+  margin-bottom: 16px;
+}
+
+.ac-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* === Actions === */
+.ac-card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+  .ac-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ac-header .ac-btn {
+    margin-top: 12px;
+  }
+}

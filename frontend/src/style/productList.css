@@ -1,0 +1,123 @@
+/* productList.premium.css */
+
+/* 1. Container dùng CSS Grid cho layout đều, tự co dãn */
+.product-list {
+  display: grid;
+  padding: 25px 30px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  /* padding: 1rem; */
+  margin: 0 auto;
+  max-width: 1280px;
+  background-color: #f5f6f8;
+}
+
+/* 2. Card chính */
+.product-item {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* 3. Hình ảnh: duy trì tỉ lệ, zoom nhẹ khi hover */
+.product-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.product-item:hover .product-image {
+  transform: scale(1.05);
+}
+
+/* 4. Nội dung card */
+.product-item h3 {
+  margin: 1rem 1rem 0.5rem;
+  font-size: 1.35rem;
+  color: #222;
+}
+.product-item p {
+  flex-grow: 1;
+  margin: 0 1rem 1rem;
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  height: auto;
+}
+.product-item span {
+  display: block;
+  margin: 0 1rem 1rem;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #111;
+}
+
+/* 5. Nút “Add To Cart” / quantity-controls */
+.product-item button {
+  background-color: #f68b1e;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3 ease;
+}
+.product-item button:hover {
+  background: linear-gradient(135deg, #e37a00, #c35b00);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 6. Khi đã có trong cart: quantity-controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.quantity-controls button {
+  background-color: #333;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.quantity-controls button:hover {
+  background-color: #555;
+}
+.quantity-controls span {
+  margin: 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* 7. Responsive nhỏ hơn 600px: bung thành một cột */
+@media (max-width: 600px) {
+  .product-list {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+}
+/* ---- remove underline on product links ---- */
+.product-item a {
+  text-decoration: none;
+}
+.product-item a:hover {
+  text-decoration: none;
+}
