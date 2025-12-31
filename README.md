@@ -16,7 +16,6 @@ A full-stack e-commerce web application for selling mobile phones, built with Sp
 - [Docker Deployment](#docker-deployment)
 - [Environment Variables](#environment-variables)
 - [Testing](#testing)
-- [License](#license)
 
 ## ✨ Features
 
@@ -66,7 +65,7 @@ A full-stack e-commerce web application for selling mobile phones, built with Sp
 ### DevOps
 - **Containerization**: Docker & Docker Compose
 - **Web Server**: Nginx
-- **Code Coverage**: JaCoCo
+- **Hosting + Server**: AWS EC2 + AWS S3
 
 ## 🏗 Architecture
 
@@ -112,7 +111,27 @@ Before you begin, ensure you have the following installed:
 
 ## 🚀 Installation & Setup
 
-### Option 1: Local Development Setup
+There are two ways to run this application:
+
+1. **Standalone Development** - Run backend and frontend locally, database in Docker (recommended for development)
+2. **Full Docker Deployment** - Run everything in Docker containers (recommended for production)
+
+### Comparison: Standalone vs Docker
+
+| Feature | Standalone Development | Full Docker Deployment |
+|---------|----------------------|----------------------|
+| **Database** | Docker container | Docker container |
+| **Backend** | Local machine (port 8080) | Docker container (port 8080) |
+| **Frontend** | Local machine (port 3000) | Docker container (port 80) |
+| **Hot Reload** | ✅ Yes (automatic) | ❌ No (requires rebuild) |
+| **Debugging** | ✅ Easy (IDE integration) | ⚠️ More complex |
+| **Setup Complexity** | Medium | Easy |
+| **Resource Usage** | Lower | Higher |
+| **Best For** | Development & Testing | Production & Demo |
+
+### Option 1: Standalone Development (Backend & Frontend Local, Database in Docker)
+
+This option allows you to run backend and frontend on your local machine for easier debugging, while using Docker only for the database.
 
 #### 1. Clone the Repository
 ```bash
@@ -120,20 +139,34 @@ git clone <repository-url>
 cd ltweb
 ```
 
-#### 2. Database Setup
+#### 2. Start MySQL Database with Docker
 ```bash
-# Create MySQL database
-mysql -u root -p
-CREATE DATABASE spring_ecommerce_db;
-EXIT;
+# Start only the MySQL service from docker-compose
+docker-compose up -d mysql
+
+# Verify MySQL is running
+docker-compose ps mysql
+
+# View MySQL logs (optional)
+docker-compose logs -f mysql
 ```
+
+The MySQL database will be available at `localhost:3306` with:
+- **Database**: `spring_ecommerce_db`
+- **Username**: `root`
+- **Password**: `root`
+
+**Note**: The database will be automatically created on first startup.
 
 #### 3. Backend Setup
 ```bash
 cd backend
 
-# Update application.properties with your database credentials
-# Edit: src/main/resources/application.properties
+# Update application.properties with database credentials
+# The default configuration should work with Docker MySQL:
+# spring.datasource.url=jdbc:mysql://localhost:3306/spring_ecommerce_db
+# spring.datasource.username=root
+# spring.datasource.password=root
 
 # Build the project
 mvn clean install
@@ -155,9 +188,20 @@ npm install
 npm start
 ```
 
-The frontend will start on `http://localhost:3000`
+The frontend will start on `http://localhost:3000` and automatically open in your browser.
 
-### Option 2: Docker Deployment (Recommended)
+#### 5. Stop Database (when done)
+```bash
+# Stop MySQL container
+docker-compose stop mysql
+
+# Or remove the container (data persists in volume)
+docker-compose down mysql
+```
+
+### Option 2: Full Docker Deployment (All Services in Docker)
+
+This option runs all services (MySQL, Backend, Frontend) in Docker containers. This is the easiest way to get started and is recommended for production deployments.
 
 #### 1. Clone the Repository
 ```bash
@@ -165,8 +209,8 @@ git clone <repository-url>
 cd ltweb
 ```
 
-#### 2. Configure Environment Variables
-Create a `.env` file in the root directory (optional, for production):
+#### 2. Configure Environment Variables (Optional)
+Create a `.env` file in the root directory for production settings:
 
 ```env
 # AWS S3 Configuration (optional)
@@ -184,22 +228,45 @@ REACT_APP_API_URL=http://localhost:8080
 APP_FRONTEND_URL=http://localhost:80
 ```
 
+**Note**: If you don't create a `.env` file, the application will use default values from `docker-compose.yml`.
+
 #### 3. Build and Run with Docker Compose
 ```bash
-# Build and start all services
+# Build and start all services (MySQL, Backend, Frontend)
 docker-compose up -d
 
-# View logs
+# View logs from all services
 docker-compose logs -f
 
-# Stop services
+# View logs from a specific service
+docker-compose logs -f backend
+docker-compose logs -f frontend
+docker-compose logs -f mysql
+
+# Check service status
+docker-compose ps
+
+# Stop all services
 docker-compose down
+
+# Stop and remove volumes (⚠️ This will delete database data)
+docker-compose down -v
 ```
 
 The application will be available at:
 - **Frontend**: `http://localhost:80`
 - **Backend API**: `http://localhost:8080`
 - **MySQL**: `localhost:3306`
+
+#### 4. Rebuild After Code Changes
+```bash
+# Rebuild and restart all services
+docker-compose up -d --build
+
+# Rebuild specific service
+docker-compose up -d --build backend
+docker-compose up -d --build frontend
+```
 
 ## ⚙️ Configuration
 
@@ -243,38 +310,108 @@ Or set it in `docker-compose.yml` for Docker deployment.
 
 ## 🏃 Running the Application
 
-### Development Mode
+### Standalone Development Mode
 
-**Backend:**
+This mode runs backend and frontend locally while using Docker for the database.
+
+#### Step 1: Start Database
+```bash
+# Start MySQL in Docker
+docker-compose up -d mysql
+
+# Wait a few seconds for MySQL to initialize
+# Check if MySQL is ready
+docker-compose ps mysql
+```
+
+#### Step 2: Start Backend
+Open a terminal and run:
 ```bash
 cd backend
 mvn spring-boot:run
 ```
+Backend will be available at `http://localhost:8080`
 
-**Frontend:**
+#### Step 3: Start Frontend
+Open another terminal and run:
 ```bash
 cd frontend
 npm start
 ```
+Frontend will automatically open at `http://localhost:3000`
 
-### Production Mode
-
-**Using Docker:**
+#### Stop Services
 ```bash
-docker-compose up -d
+# Stop backend: Press Ctrl+C in backend terminal
+# Stop frontend: Press Ctrl+C in frontend terminal
+# Stop database:
+docker-compose stop mysql
 ```
 
-**Manual Build:**
-```bash
-# Backend
-cd backend
-mvn clean package
-java -jar target/backend-1.0-SNAPSHOT.jar
+### Full Docker Mode
 
-# Frontend
+This mode runs all services in Docker containers.
+
+#### Start All Services
+```bash
+# Start all services (MySQL, Backend, Frontend)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+```
+
+#### Access the Application
+- **Frontend**: Open browser at `http://localhost:80`
+- **Backend API**: Available at `http://localhost:8080`
+- **API Health Check**: `http://localhost:8080/product/get-all`
+
+#### Stop All Services
+```bash
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (⚠️ deletes database data)
+docker-compose down -v
+```
+
+#### Restart Services
+```bash
+# Restart all services
+docker-compose restart
+
+# Restart specific service
+docker-compose restart backend
+docker-compose restart frontend
+docker-compose restart mysql
+```
+
+### Production Build (Manual)
+
+If you want to build and run manually without Docker:
+
+#### Backend Production Build
+```bash
+cd backend
+
+# Build JAR file
+mvn clean package
+
+# Run the JAR
+java -jar target/backend-1.0-SNAPSHOT.jar
+```
+
+#### Frontend Production Build
+```bash
 cd frontend
+
+# Build for production
 npm run build
-# Serve the build folder using a web server
+
+# The build folder contains optimized production files
+# Serve using a web server like nginx, apache, or serve
+# Example with serve (install: npm install -g serve)
+serve -s build -l 80
 ```
 
 ## 📡 API Endpoints
@@ -475,14 +612,6 @@ After first startup, you can login with:
 
 **⚠️ Important**: Change these credentials in production!
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👥 Authors
-
-- **Your Name** - *Initial work*
-
 ## 🙏 Acknowledgments
 
 - Spring Boot community
@@ -491,7 +620,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📞 Support
 
-For support, email your-email@example.com or create an issue in the repository.
+For support, email lqhieu110604@gmail.com or create an issue in the repository.
 
 ---
 
